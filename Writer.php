@@ -49,7 +49,7 @@ class Writer implements ArrayAccess
 		if(isset($this->_keys[$name])) {
 			$this->_currentRow[$this->_keys[$name]] = $value;
 		} else { 
-			throw new Exception(CSVWriter::COLUMN_DOES_NOT_EXIST);
+			throw new Exception(Writer::COLUMN_DOES_NOT_EXIST);
 		}
 	}
 	
@@ -131,7 +131,7 @@ class Writer implements ArrayAccess
 		if($this->offsetExists($offset)) {
 			$this->_currentRow[$this->_keys[$offset]] = $value;
 		} else {
-			throw new Exception(CSVWriter::COLUMN_DOES_NOT_EXIST);
+			throw new Exception(Writer::COLUMN_DOES_NOT_EXIST);
 		}
 	}
 	
