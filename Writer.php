@@ -1,6 +1,6 @@
 <?php
 
-class Writer implements \ArrayAccess
+class Writer implements ArrayAccess
 {
 	protected $_header = array();
 	protected $_rows   = array();
