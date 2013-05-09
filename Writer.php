@@ -10,13 +10,13 @@ class Writer implements ArrayAccess
 	protected $_currentRow = array();
 	
 	const COLUMN_DOES_NOT_EXIST = 'Column does not exist';
-	
+
 	public function __construct()
 	{
 		$this->_createFileHandler();
 		$this->setDelimiter(';');
 	}
-	
+
 	public function save($destination = null)
 	{
 		if(!empty($this->_currentRow)) {
@@ -30,20 +30,20 @@ class Writer implements ArrayAccess
 		}
 		return true;
 	}
-	
+
 	public function addValue($value = '') 
 	{
 		array_push($this->_currentRow,$value);
 		return $this;
 	}
-	
+
 	public function nextRow() 
 	{
 		$this->addRow($this->_currentRow);
 		$this->_currentRow = Array();
 		return $this;
 	}
-	
+
 	public function __set($name,$value)
 	{
 		if(isset($this->_keys[$name])) {
@@ -52,19 +52,19 @@ class Writer implements ArrayAccess
 			throw new Exception(Writer::COLUMN_DOES_NOT_EXIST);
 		}
 	}
-	
+
 	protected function _createFilehandler()
 	{
 		$this->_fileHandler = fopen('csv.csv','w');
 	}
-	
+
 	public function setHeader($values = array())
 	{
 		$this->_header = $values;
 		$this->_keys = array_flip($values);
 		return $this;
 	}
-	
+
 	public function addRow($row = array())
 	{
 		ksort($row);
@@ -73,7 +73,7 @@ class Writer implements ArrayAccess
 		}
 		return $this;
 	}
-	
+
 	public function setRows($rows = array())
 	{
 		foreach($rows as $row) {
@@ -81,13 +81,13 @@ class Writer implements ArrayAccess
 		}
 		return $this;
 	}
-	
+
 	public function setDelimiter($delimiter)
 	{
 		$this->_delimiter = $delimiter;
 		return $this;
 	}
-	
+
 	protected function _writeRow($row)
 	{
 		$r = $this->_quoteValues($row);
@@ -97,7 +97,7 @@ class Writer implements ArrayAccess
 			implode($this->_delimiter,$r) . "\r\n"
 		);
 	}
-	
+
 	protected function _ensemble()
 	{
 		$this->_writeRow(
@@ -108,14 +108,14 @@ class Writer implements ArrayAccess
 			$this->_writeRow($row);
 		}	
 	}
-	
+
 	protected function _quoteValues($values)
 	{
 		return array_map(function($value){
 				return '"' . $value . '"';
 		},$values);
 	}
-	
+
 	public function offsetExists($offset) 
 	{
 		return isset($this->_currentRow[$this->_keys[$offset]]);
@@ -125,7 +125,7 @@ class Writer implements ArrayAccess
 	{
 		return isset($this->_currentRow[$this->_keys[$offset]]) ? $this->_currentRow[$this->_keys[$offset]] : null;
 	}
-	
+
 	public function offsetSet($offset,$value)
 	{
 		if($this->offsetExists($offset)) {
@@ -134,11 +134,11 @@ class Writer implements ArrayAccess
 			throw new Exception(Writer::COLUMN_DOES_NOT_EXIST);
 		}
 	}
-	
+
 	public function offsetUnset($offset) 
 	{
 		unset($this->_currentRow[$this->_keys[$offset]]);
 		return $this;
 	}
-	
+
 }
